@@ -1,0 +1,78 @@
+﻿@page "{id:int}"
+@model DetailsModel
+@{
+    ViewData["Title"] = $"Ticket #{Model.Ticket?.Id} Details - CivicConnect";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Navigation -->
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <a asp-page="/Index" class="btn btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                </a>
+                <span class="text-muted small">Ticket ID: #@Model.Ticket?.Id</span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger shadow-sm rounded-4 mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>@Model.ErrorMessage
+                </div>
+            }
+
+            @if (Model.Ticket != null)
+            {
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+                    <div class="card-header bg-dark text-white p-4"
+                         style="background: linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%);">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                                @Model.Ticket.CategoryName
+                            </span>
+                            @if (string.Equals(Model.Ticket.CalculatedPriority, "Emergency", StringComparison.OrdinalIgnoreCase) ||
+                                 string.Equals(Model.Ticket.CalculatedPriority, "High", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge bg-danger text-white fw-bold rounded-pill px-3 py-2">
+                                    <i class="bi bi-exclamation-circle me-1"></i>@Model.Ticket.CalculatedPriority.ToUpper()
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info-subtle text-info fw-semibold rounded-pill px-3 py-2">
+                                    @Model.Ticket.CalculatedPriority
+                                </span>
+                            }
+                        </div>
+                        <h1 class="h2 fw-bold text-white mb-0">@Model.Ticket.Title</h1>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <small class="text-muted d-block uppercase fw-bold mb-1">Location</small>
+                                    <span class="fw-semibold text-dark">
+                                        <i class="bi bi-geo-alt-fill text-primary me-1"></i> @Model.Ticket.Location
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <small class="text-muted d-block uppercase fw-bold mb-1">Date Logged</small>
+                                    <span class="fw-semibold text-dark">
+                                        <i class="bi bi-calendar3 me-1"></i> @Model.Ticket.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-2">Issue Summary</h5>
+                        <p class="text-secondary leading-relaxed fs-5 mb-0">@Model.Ticket.Description</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
