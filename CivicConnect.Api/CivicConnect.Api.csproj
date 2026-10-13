@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CivicConnect.Core\CivicConnect.Core.csproj" />
     <ProjectReference Include="..\CivicConnect.Infrastructure\CivicConnect.Infrastructure.csproj" />
+    <ProjectReference Include="..\CivicConnect.Web\CivicConnect.Web.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CivicConnect.Web.Services;
 using CivicConnect.Web.ViewModels;
+using CivicConnect.Web.Services;
 
 namespace CivicConnect.Web.Pages
 {
@@ -15,25 +15,57 @@ namespace CivicConnect.Web.Pages
         }
 
         public TicketViewModel? Ticket { get; set; }
-        public string? ErrorMessage { get; set; }
+        public string? Message { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            try
+            Ticket = await _apiClient.GetTicketByIdAsync(id);
+            if (Ticket == null)
             {
-                Ticket = await _apiClient.GetTicketByIdAsync(id);
-
-                if (Ticket == null)
-                {
-                    ErrorMessage = $"Ticket #{id} was not found.";
-                }
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Failed to retrieve ticket details: {ex.Message}";
-            }
-
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostUpdateStatusAsync(Guid id, string newStatus)
+        {
+            // Only admins may update ticket status
+            if (!User.IsInRole("Admin"))
+                return Forbid();
+
+            var success = await _apiClient.UpdateTicketStatusAsync(id, newStatus);
+            if (success)
+            {
+                Message = $"Status successfully updated to '{newStatus}'.";
+            }
+            else
+            {
+                Message = "Failed to update status.";
+            }
+
+            return await OnGetAsync(id);
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+        {
+            var ticket = await _apiClient.GetTicketByIdAsync(id);
+            if (ticket == null)
+                return NotFound();
+
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // Only the original owner may delete their report (admins cannot delete)
+            if (ticket.CreatedByUserId != currentUserId)
+                return Forbid();
+
+            var success = await _apiClient.DeleteTicketAsync(id);
+            if (!success)
+            {
+                Message = "Failed to delete the ticket.";
+                return await OnGetAsync(id);
+            }
+
+            return RedirectToPage("/Tickets/Index");
         }
     }
 }
