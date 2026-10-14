@@ -1,0 +1,168 @@
+/* CivicConnect government-style theme
+   Replaced with a focused, overriding stylesheet to ensure theme applies reliably.
+   If caching prevents updates, do a hard refresh (Ctrl+F5) or clear browser cache.
+*/
+
+:root {
+  --gov-primary: #0B5AA6; /* deep government blue */
+  --gov-primary-dark: #084a86;
+  --gov-accent:  #F2B705; /* warm gold accent */
+  --gov-muted:   #6C757D;
+  --gov-bg:      #F4F6F8;
+  --gov-surface: #FFFFFF;
+  --gov-radius:  12px;
+  --gov-shadow:  0 8px 24px rgba(11,90,166,0.06);
+  --gov-focus:   rgba(242,183,5,0.18);
+}
+
+/* Reset / base */
+html, body { height: 100%; }
+body {
+  background-color: var(--gov-bg) !important;
+  color: #1f2d3d;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Navbar overrides to ensure our colors take precedence over Bootstrap */
+.navbar {
+  background: linear-gradient(90deg, var(--gov-primary), var(--gov-primary-dark)) !important;
+  box-shadow: 0 4px 12px rgba(15,56,106,0.08);
+}
+.navbar .navbar-brand { font-weight: 700; color: #fff !important; }
+.navbar .nav-link { color: rgba(255,255,255,0.95) !important; }
+.navbar .nav-link:hover { color: #fff !important; }
+
+/* Header brand icon sizing */
+.navbar-brand .bi { font-size: 1.25rem; margin-right: .4rem; }
+
+/* Primary buttons */
+.btn-primary {
+  background-color: var(--gov-primary) !important;
+  border-color: var(--gov-primary) !important;
+  box-shadow: none !important;
+  border-radius: 999px !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--gov-primary-dark) !important;
+  border-color: var(--gov-primary-dark) !important;
+}
+.btn-outline-primary {
+  color: var(--gov-primary) !important;
+  border-color: rgba(11,90,166,0.12) !important;
+}
+
+/* Cards */
+.card {
+  border-radius: var(--gov-radius) !important;
+  box-shadow: var(--gov-shadow) !important;
+  border: 1px solid rgba(15,56,106,0.04) !important;
+}
+
+/* Ticket card component */
+.ticket-card { padding: 1.25rem; background: var(--gov-surface); }
+.ticket-card .title { color: #102135; font-weight:700; }
+.ticket-card .meta { color: var(--gov-muted); font-size: .95rem; }
+
+/* Status badges */
+.badge-status { padding: .35rem .7rem; border-radius: 999px; font-weight:600; }
+.badge-status.submitted { background: #e9f2ff; color: var(--gov-primary); }
+.badge-status.inprogress { background: #fff3cd; color: #8a6d00; }
+.badge-status.resolved { background: #e6f4ea; color: #1f7a3a; }
+.badge-status.closed { background: #f0f0f0; color: var(--gov-muted); }
+
+/* Table header stronger styling */
+.table thead th {
+  background: linear-gradient(90deg,var(--gov-primary), var(--gov-primary-dark)) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* Form focus and accessibility */
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 0.15rem rgba(11,90,166,0.12) !important;
+  border-color: var(--gov-primary) !important;
+}
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+  outline: 3px solid var(--gov-focus) !important;
+  outline-offset: 2px !important;
+}
+
+/* Footer adjustments */
+footer {
+  background: linear-gradient(0deg, var(--gov-primary-dark), var(--gov-primary)) !important;
+  color: #fff !important;
+}
+
+/* Small screens */
+@media (max-width: 767px) {
+  .navbar .d-flex { flex-direction: column; gap: .5rem; }
+}
+
+/* Utility helpers */
+.text-muted-strong { color: var(--gov-muted) !important; }
+
+/* Ensure hero spacing looks good */
+.hero { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+
+/* Explicitly increase specificity for elements that sometimes remain styled by older CSS */
+header .navbar, header .navbar a, header .navbar .btn { transition: none !important; }
+
+/* End of theme */
+
+/* Creative, professional touches */
+.hero {
+  background: linear-gradient(180deg, rgba(11,90,166,0.06), rgba(11,90,166,0.02));
+  border-radius: 14px;
+  padding: 2.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero svg.illustration {
+  position: absolute;
+  right: 1.5rem;
+  top: 0.5rem;
+  width: 320px;
+  height: 160px;
+  opacity: 0.12; /* subtle background graphic for when no image present */
+  filter: drop-shadow(0 8px 24px rgba(11,90,166,0.06));
+}
+
+.hero img.illustration {
+  position: absolute;
+  right: 1.5rem;
+  top: 0.5rem;
+  width: 480px; /* larger image */
+  max-width: 52%;
+  height: auto; /* preserve aspect ratio to avoid distortion/blurring */
+  opacity: 1; /* ensure full color */
+  object-fit: cover;
+  filter: drop-shadow(0 12px 32px rgba(11,90,166,0.08));
+}
+
+.stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.stat { flex: 1 1 12rem; background: linear-gradient(180deg,#fff,#fbfdff); padding: 1rem; border-radius: 12px; border:1px solid rgba(11,90,166,0.04); box-shadow: 0 6px 18px rgba(11,90,166,0.04); }
+.stat .num { font-size: 1.5rem; font-weight:700; color:var(--gov-primary); }
+.stat .label { font-size: .9rem; color:var(--gov-muted); }
+
+/* Ticket row hover effect */
+table.table tbody tr:hover { background: linear-gradient(90deg, rgba(11,90,166,0.02), rgba(11,90,166,0.01)); transform: translateY(-2px); }
+table.table tbody tr { transition: transform .12s ease, background .12s ease; }
+
+/* Card grid for tickets (used on mobile or optional) */
+.tickets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; }
+.ticket-card-compact { padding:1rem; border-radius:12px; background: #fff; border:1px solid rgba(15,56,106,0.04); }
+.ticket-card-compact:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(11,90,166,0.06); }
+
+/* Accent underline for headings */
+.section-title { position: relative; padding-bottom: .5rem; }
+.section-title:after { content: ''; position: absolute; left:0; bottom:0; width:64px; height:4px; background: linear-gradient(90deg,var(--gov-accent), #f29f05); border-radius:2px; }
+
+/* subtle animations */
+@keyframes floaty { 0%{ transform:translateY(0);}50%{ transform:translateY(-6px);}100%{ transform:translateY(0);} }
+.floaty { animation: floaty 6s ease-in-out infinite; }
+
