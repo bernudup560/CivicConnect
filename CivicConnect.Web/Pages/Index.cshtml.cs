@@ -36,6 +36,12 @@ public class IndexModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? SelectedStatus { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public string? SortBy { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string? SortDir { get; set; }
+
     public async Task OnGetAsync()
     {
         try
@@ -65,7 +71,18 @@ public class IndexModel : PageModel
                 items = items.Where(t => string.Equals(t.Status, st, StringComparison.OrdinalIgnoreCase));
             }
 
-            Tickets = items.OrderByDescending(t => t.CreatedAt).ToList();
+            // Default sort by created date descending unless requested otherwise
+            if (!string.IsNullOrWhiteSpace(SortBy) && string.Equals(SortBy, "date", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.Equals(SortDir, "asc", StringComparison.OrdinalIgnoreCase))
+                    Tickets = items.OrderBy(t => t.CreatedAt).ToList();
+                else
+                    Tickets = items.OrderByDescending(t => t.CreatedAt).ToList();
+            }
+            else
+            {
+                Tickets = items.OrderByDescending(t => t.CreatedAt).ToList();
+            }
 
             var wwwroot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             // Check both images/ and lib/ locations for the provided hero image

@@ -147,6 +147,16 @@ public class TicketApiClient : ITicketApiClient
         return Task.FromResult(false);
     }
 
+    public Task<bool> UpdateTicketPriorityAsync(Guid id, string newPriority)
+    {
+        if (_store.TryGetValue(id, out var ticket))
+        {
+            ticket.CalculatedPriority = newPriority;
+            return Task.FromResult(true);
+        }
+        return Task.FromResult(false);
+    }
+
     public Task<bool> UpdateTicketAsync(TicketViewModel updatedTicket)
     {
         if (updatedTicket == null || updatedTicket.Id == Guid.Empty)

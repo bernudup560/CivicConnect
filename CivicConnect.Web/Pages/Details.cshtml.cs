@@ -14,6 +14,24 @@ namespace CivicConnect.Web.Pages
             _apiClient = apiClient;
         }
 
+        public async Task<IActionResult> OnPostChangePriorityAsync(Guid id, string newPriority)
+        {
+            if (!User.IsInRole("Admin"))
+                return Forbid();
+
+            var success = await _apiClient.UpdateTicketPriorityAsync(id, newPriority);
+            if (success)
+            {
+                Message = $"Priority successfully updated to '{newPriority}'.";
+            }
+            else
+            {
+                Message = "Failed to update priority.";
+            }
+
+            return await OnGetAsync(id);
+        }
+
         public TicketViewModel? Ticket { get; set; }
         public string? Message { get; set; }
 

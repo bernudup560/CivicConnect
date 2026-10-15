@@ -23,6 +23,12 @@ namespace CivicConnect.Web.Pages.Tickets
         [Microsoft.AspNetCore.Mvc.BindProperty(SupportsGet = true)]
         public string? SelectedStatus { get; set; }
 
+        [Microsoft.AspNetCore.Mvc.BindProperty(SupportsGet = true)]
+        public string? SortBy { get; set; }
+
+        [Microsoft.AspNetCore.Mvc.BindProperty(SupportsGet = true)]
+        public string? SortDir { get; set; }
+
         public List<TicketViewModel> Tickets { get; set; } = new();
         public int TotalCount { get; set; }
         public int OpenCount { get; set; }
@@ -68,6 +74,15 @@ namespace CivicConnect.Web.Pages.Tickets
                 if (!string.IsNullOrWhiteSpace(SelectedStatus))
                 {
                     Tickets = Tickets.Where(t => string.Equals(t.Status, SelectedStatus, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                // Sorting
+                if (!string.IsNullOrWhiteSpace(SortBy) && string.Equals(SortBy, "date", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.Equals(SortDir, "asc", StringComparison.OrdinalIgnoreCase))
+                        Tickets = Tickets.OrderBy(t => t.CreatedAt).ToList();
+                    else
+                        Tickets = Tickets.OrderByDescending(t => t.CreatedAt).ToList();
                 }
             }
             catch (Exception ex)

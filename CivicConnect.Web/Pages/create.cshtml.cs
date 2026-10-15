@@ -25,13 +25,26 @@ public class CreateModel : PageModel
 
     public string? ErrorMessage { get; set; }
 
-    public void OnGet()
+    public Microsoft.AspNetCore.Mvc.IActionResult OnGet()
     {
+        // Require authentication to access the create page
+        if (!User?.Identity?.IsAuthenticated ?? true)
+        {
+            // Redirect to login page
+            return RedirectToPage("/Account/Login", new { ReturnUrl = "/Create" });
+        }
+
         LoadCategories();
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (!User?.Identity?.IsAuthenticated ?? true)
+        {
+            return RedirectToPage("/Account/Login", new { ReturnUrl = "/Create" });
+        }
+
         if (!ModelState.IsValid)
         {
             LoadCategories();
