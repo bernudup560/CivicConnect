@@ -4,7 +4,7 @@
     ViewData["Title"] = "Sign In - CivicConnect";
 }
 
-<div class="container-fluid my-5 px-4">
+<div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
@@ -38,7 +38,12 @@
 
                         <div class="mb-4">
                             <label asp-for="Password" class="form-label fw-semibold text-dark">Password</label>
-                            <input asp-for="Password" type="password" class="form-control form-control-lg rounded-3" placeholder="••••••••" required />
+                            <div class="input-group input-group-lg">
+                                <input asp-for="Password" type="password" id="loginPassword" class="form-control rounded-start-3" placeholder="••••••••" required />
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" aria-label="Toggle password visibility">
+                                    <i class="bi bi-eye" id="loginEyeIcon"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold shadow-sm mb-3">
@@ -55,3 +60,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("bi-eye");
+            eyeIcon.classList.add("bi-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("bi-eye-slash");
+            eyeIcon.classList.add("bi-eye");
+        }
+    }
+</script>

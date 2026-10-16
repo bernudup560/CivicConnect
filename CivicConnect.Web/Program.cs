@@ -24,7 +24,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (!app.Environment.IsDevelopment() && !app.Environment.IsStaging())
+{
+    app.UseHttpsRedirection();
+}
 app.UseHttpsRedirection();
+
+
 app.UseStaticFiles();
 
 // (Correlation middleware and lightweight telemetry removed)

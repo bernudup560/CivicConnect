@@ -69,7 +69,7 @@ public class CivicConnectDbContext : DbContext
         SeedDevelopmentData(modelBuilder);
     }
 
-   
+    // SUGGESTION: starter rows so you can test immediately without creating categories/users by hand
     private static void SeedDevelopmentData(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>().HasData(

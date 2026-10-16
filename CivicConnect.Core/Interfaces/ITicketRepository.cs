@@ -1,4 +1,4 @@
-﻿using CivicConnect.Core.Entities;
+using CivicConnect.Core.Entities;
 
 namespace CivicConnect.Core.Interfaces;
 

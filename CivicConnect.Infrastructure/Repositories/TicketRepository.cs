@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using CivicConnect.Core.Entities;
 using CivicConnect.Core.Interfaces;
 using CivicConnect.Infrastructure.Data;

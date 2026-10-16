@@ -34,7 +34,12 @@
                         <!-- Issue Title -->
                         <div class="mb-4">
                             <label asp-for="Ticket.Title" class="form-label fw-semibold text-dark">Issue Title</label>
-                            <input asp-for="Ticket.Title" class="form-control form-control-lg rounded-3" placeholder="e.g., Pothole on Main Street" required />
+                            <input asp-for="Ticket.Title"
+                                   class="form-control form-control-lg rounded-3"
+                                   placeholder="e.g., Pothole on Main Street"
+                                   pattern=".*[a-zA-Z]+.*"
+                                   title="Issue Title must contain letters, not just numbers."
+                                   required />
                             <span asp-validation-for="Ticket.Title" class="text-danger small"></span>
                         </div>
 
@@ -57,7 +62,12 @@
                                 <label asp-for="Ticket.Location" class="form-label fw-semibold text-dark">Location / Address</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
-                                    <input asp-for="Ticket.Location" class="form-control rounded-end-3" placeholder="Street, suburb, or landmark" required />
+                                    <input asp-for="Ticket.Location"
+                                           class="form-control rounded-end-3"
+                                           placeholder="Street, suburb, or landmark"
+                                           pattern=".*[a-zA-Z]+.*"
+                                           title="Location must include a street or suburb name, not just numbers."
+                                           required />
                                 </div>
                                 <span asp-validation-for="Ticket.Location" class="text-danger small"></span>
                             </div>

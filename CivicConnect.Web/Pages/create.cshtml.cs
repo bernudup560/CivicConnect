@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -45,6 +46,22 @@ public class CreateModel : PageModel
             return RedirectToPage("/Account/Login", new { ReturnUrl = "/Create" });
         }
 
+        // Block pure numbers or symbols in Title, Location, and Description
+        if (!string.IsNullOrWhiteSpace(Ticket.Title) && !Ticket.Title.Any(char.IsLetter))
+        {
+            ModelState.AddModelError("Ticket.Title", "Issue Title must contain descriptive text, not just numbers.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(Ticket.Location) && !Ticket.Location.Any(char.IsLetter))
+        {
+            ModelState.AddModelError("Ticket.Location", "Location must include a street or suburb name, not just numbers.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(Ticket.Description) && !Ticket.Description.Any(char.IsLetter))
+        {
+            ModelState.AddModelError("Ticket.Description", "Description must contain descriptive text, not just numbers.");
+        }
+
         if (!ModelState.IsValid)
         {
             LoadCategories();
@@ -59,9 +76,9 @@ public class CreateModel : PageModel
             var ticketVm = new TicketViewModel
             {
                 Id = Guid.NewGuid(),
-                Title = Ticket.Title,
-                Description = Ticket.Description,
-                Location = Ticket.Location,
+                Title = Ticket.Title.Trim() ?? string.Empty,
+                Description = Ticket.Description.Trim() ?? string.Empty,
+                Location = Ticket.Location.Trim() ?? string.Empty,
                 CategoryName = MapCategoryId(Ticket.CategoryId),
                 CalculatedPriority = Ticket.IsEmergency ? "Emergency" : "Low",
                 Status = "Submitted",
