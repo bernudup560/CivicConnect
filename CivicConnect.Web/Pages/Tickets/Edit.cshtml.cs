@@ -36,25 +36,38 @@ namespace CivicConnect.Web.Pages.Tickets
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (Ticket == null)
+            if (Ticket == null || Ticket.Id == Guid.Empty)
             {
                 ErrorMessage = "Invalid ticket data.";
                 return Page();
             }
 
-            // Only owner can update
+            // Fetch the existing ticket from the API to validate ownership and preserve fields
+            var existing = await _apiClient.GetTicketByIdAsync(Ticket.Id);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            // Only the original owner may update
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (Ticket.CreatedByUserId != userId)
+            if (existing.CreatedByUserId != userId)
                 return Forbid();
 
-            var success = await _apiClient.UpdateTicketAsync(Ticket);
+            // Apply editable fields from the form to the stored ticket model
+            existing.Title = Ticket.Title;
+            existing.Description = Ticket.Description;
+            existing.CategoryName = Ticket.CategoryName;
+            existing.Location = Ticket.Location;
+
+            var success = await _apiClient.UpdateTicketAsync(existing);
             if (!success)
             {
                 ErrorMessage = "Failed to update the ticket.";
                 return Page();
             }
 
-            return RedirectToPage("/Details", new { id = Ticket.Id });
+            return RedirectToPage("/Details", new { id = existing.Id });
         }
     }
 }

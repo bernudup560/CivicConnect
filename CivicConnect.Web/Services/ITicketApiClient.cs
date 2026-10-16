@@ -12,4 +12,5 @@ public interface ITicketApiClient
     Task<bool> UpdateTicketStatusAsync(Guid id, string newStatus);
     Task<bool> UpdateTicketAsync(TicketViewModel updatedTicket);
     Task<bool> DeleteTicketAsync(Guid id);
+    Task<bool> UpdateTicketPriorityAsync(Guid id, string newPriority);
 }

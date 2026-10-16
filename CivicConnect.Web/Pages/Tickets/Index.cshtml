@@ -4,7 +4,7 @@
     ViewData["Title"] = "All Logged Tickets - CivicConnect";
 }
 
-<div class="container my-5">
+<div class="container-fluid my-5 px-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom">
         <div>
             <h1 class="display-6 fw-bold text-dark mb-1">Community Tickets</h1>
@@ -68,17 +68,33 @@
                     <tr>
                         <th scope="col" class="py-3 px-4">Title</th>
                         <th scope="col" class="py-3">Category</th>
+                        <th scope="col" class="py-3">Status</th>
                         <th scope="col" class="py-3">Priority</th>
                         <th scope="col" class="py-3">Location</th>
-                        <th scope="col" class="py-3">Date Logged</th>
+                        <th scope="col" class="py-3">
+                            <a asp-page="./Index"
+                               asp-route-SortBy="date"
+                               asp-route-SortDir="@(string.Equals(Model.SortBy, "date", System.StringComparison.OrdinalIgnoreCase) && string.Equals(Model.SortDir, "asc", System.StringComparison.OrdinalIgnoreCase) ? "desc" : "asc")"
+                               asp-route-SearchKeyword="@Model.SearchKeyword"
+                               asp-route-SelectedCategory="@Model.SelectedCategory"
+                               asp-route-SelectedStatus="@Model.SelectedStatus"
+                               class="text-white text-decoration-none">
+                                Date Logged
+                                @if (string.Equals(Model.SortBy, "date", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (string.Equals(Model.SortDir, "asc", System.StringComparison.OrdinalIgnoreCase)) { <i class="bi bi-arrow-up-short ms-2"></i> }
+                                    else { <i class="bi bi-arrow-down-short ms-2"></i> }
+                                }
+                            </a>
+                        </th>
                         <th scope="col" class="py-3 px-4 text-end">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (!Model.Tickets.Any())
                     {
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
+                    <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
                                 <i class="bi bi-inbox display-4 d-block mb-3"></i>
                                 No tickets currently registered.
                             </td>
@@ -88,12 +104,35 @@
                     {
                         @foreach (var ticket in Model.Tickets)
                         {
-                            <tr>
+                        <tr>
                                 <td class="px-4 fw-bold text-dark">@ticket.Title</td>
                                 <td>
                                     <span class="badge bg-light text-dark border rounded-pill px-3 py-2 fw-normal fs-6">
                                         @ticket.CategoryName
                                     </span>
+                                </td>
+                                <td>
+                                    @if (string.Equals(ticket.Status, "Submitted", StringComparison.OrdinalIgnoreCase) ||
+                                         string.Equals(ticket.Status, "Open", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge bg-warning text-dark fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                    }
+                                    else if (string.Equals(ticket.Status, "In Progress", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge bg-info text-dark fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                    }
+                                    else if (string.Equals(ticket.Status, "Resolved", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge bg-success text-white fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                    }
+                                    else if (string.Equals(ticket.Status, "Closed", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="badge bg-secondary text-white fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-dark fw-normal rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                    }
                                 </td>
                                 <td>
                                     @if (string.Equals(ticket.CalculatedPriority, "Emergency", StringComparison.OrdinalIgnoreCase) ||

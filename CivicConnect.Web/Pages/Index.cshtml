@@ -5,7 +5,7 @@
     bool isAdmin = User.IsInRole("Admin");
 }
 
-<div class="container my-5">
+<div class="container-fluid my-5 px-4">
     <!-- Hero -->
     <section class="hero">
         <div class="row align-items-center">
@@ -95,6 +95,22 @@
                         <th class="py-3">Category</th>
                         <th class="py-3">Status</th>
                         <th class="py-3">Location</th>
+                        <th class="py-3">
+                            <a asp-page="./Index"
+                               asp-route-SortBy="date"
+                               asp-route-SortDir="@(string.Equals(Model.SortBy, "date", System.StringComparison.OrdinalIgnoreCase) && string.Equals(Model.SortDir, "asc", System.StringComparison.OrdinalIgnoreCase) ? "desc" : "asc")"
+                               asp-route-SearchKeyword="@Model.SearchKeyword"
+                               asp-route-SelectedCategory="@Model.SelectedCategory"
+                               asp-route-SelectedStatus="@Model.SelectedStatus"
+                               class="text-white text-decoration-none">
+                                Date
+                                @if (string.Equals(Model.SortBy, "date", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (string.Equals(Model.SortDir, "asc", System.StringComparison.OrdinalIgnoreCase)) { <i class="bi bi-arrow-up-short ms-2"></i> }
+                                    else { <i class="bi bi-arrow-down-short ms-2"></i> }
+                                }
+                            </a>
+                        </th>
                         <th class="py-3 px-4 text-end">Action</th>
                     </tr>
                 </thead>
@@ -105,8 +121,30 @@
                             <td class="px-4 text-muted fw-semibold">@ticket.TicketNumber</td>
                             <td class="px-4 fw-bold">@ticket.Title</td>
                             <td><span class="badge bg-light text-dark border rounded-pill px-3 py-2 fs-6">@ticket.CategoryName</span></td>
-                            <td><span class="badge bg-info-subtle text-info fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span></td>
+                            <td>
+                                @if (string.Equals(ticket.Status, "Submitted", System.StringComparison.OrdinalIgnoreCase) || string.Equals(ticket.Status, "Open", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-warning text-dark fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                }
+                                else if (string.Equals(ticket.Status, "In Progress", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-info text-dark fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                }
+                                else if (string.Equals(ticket.Status, "Resolved", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-success text-white fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                }
+                                else if (string.Equals(ticket.Status, "Closed", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-secondary text-white fw-semibold rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-dark fw-normal rounded-pill px-3 py-2 fs-6">@ticket.Status</span>
+                                }
+                            </td>
                             <td class="text-secondary fs-6"><i class="bi bi-geo-alt-fill text-primary me-1"></i>@ticket.Location</td>
+                            <td class="text-secondary fs-6">@ticket.CreatedAt.ToString("yyyy-MM-dd")</td>
                             <td class="px-4 text-end">
                                 <a asp-page="/Details" asp-route-id="@ticket.Id" class="btn btn-outline-primary rounded-pill px-4 py-2 fs-6 fw-bold">View</a>
                             </td>
@@ -148,14 +186,4 @@
             });
         </script>
     }
-                    <p class="mb-1">This is your ticket number:</p>
-                    <p class="display-6 fw-bold text-primary">@createdNumber</p>
-                    <p class="small text-muted mt-2">Please save this number to track progress or share with support.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
