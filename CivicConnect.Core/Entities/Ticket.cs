@@ -21,10 +21,16 @@ public class Ticket
 
     public Ticket(string title, string description, int categoryId, int submittedByUserId, bool isEmergency)
     {
+        
         if (string.IsNullOrWhiteSpace(title))
-            throw new DomainRuleViolationException("A ticket must have a title.");
-        if (string.IsNullOrWhiteSpace(description))
-            throw new DomainRuleViolationException("A ticket must have a description.");
+        throw new DomainRuleViolationException("A ticket must have a title.");
+    if (!title.Any(char.IsLetter))
+        throw new DomainRuleViolationException("The ticket title must contain letters, not just numbers.");
+
+    if (string.IsNullOrWhiteSpace(description))
+        throw new DomainRuleViolationException("A ticket must have a description.");
+    if (!description.Any(char.IsLetter))
+        throw new DomainRuleViolationException("The ticket description must contain letters, not just numbers.");
 
         Title = title.Trim();
         Description = description.Trim();
@@ -67,4 +73,9 @@ public class Ticket
         Status = newStatus;
         LastUpdatedAtUtc = DateTime.UtcNow;
     }
+
+     public bool IsOverdue(DateTime nowUtc) =>
+        (Status == TicketStatus.Open || Status == TicketStatus.InProgress)
+        && (nowUtc - CreatedAtUtc).TotalHours > 48;
+    
 }

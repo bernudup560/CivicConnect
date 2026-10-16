@@ -453,3 +453,6 @@ secrets.json
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Local user accounts written by LocalUserStore
+users.json

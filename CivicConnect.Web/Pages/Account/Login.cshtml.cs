@@ -30,7 +30,7 @@ namespace CivicConnect.Web.Pages.Account
             string userName = string.Empty;
             string userId = string.Empty;
 
-            // Dummy Authentication Validation
+            // 1. Check Built-in Demo Credentials
             if (Email.Equals("admin@civicconnect.gov.za", StringComparison.OrdinalIgnoreCase) && Password == "Admin123!")
             {
                 role = "Admin";
@@ -45,15 +45,26 @@ namespace CivicConnect.Web.Pages.Account
             }
             else
             {
-                ErrorMessage = "Invalid email or password. Use demo credentials above.";
-                return Page();
+                // 2. Check Registered Users in LocalUserStore
+                var registeredUser = LocalUserStore.ValidateUser(Email.Trim(), Password);
+                if (registeredUser != null)
+                {
+                    role = registeredUser.Role;
+                    userName = registeredUser.FullName;
+                    userId = registeredUser.UserId;
+                }
+                else
+                {
+                    ErrorMessage = "Invalid email or password. Please check your credentials or register an account.";
+                    return Page();
+                }
             }
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Name, userName),
-                new Claim(ClaimTypes.Email, Email),
+                new Claim(ClaimTypes.Email, Email.Trim()),
                 new Claim(ClaimTypes.Role, role)
             };
 

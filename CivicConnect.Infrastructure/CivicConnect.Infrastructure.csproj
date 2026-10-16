@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -14,7 +14,6 @@
   <ItemGroup>
     <!-- Infrastructure implements Core's interfaces, so it references Core -->
     <ProjectReference Include="..\CivicConnect.Core\CivicConnect.Core.csproj" />
-    <ProjectReference Include="..\CivicConnect.Web\CivicConnect.Web.csproj" />
   </ItemGroup>
 
 </Project>
