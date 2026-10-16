@@ -68,6 +68,17 @@ public class CreateModel : PageModel
             return Page();
         }
 
+        // Guard: ensure the three text fields are present (not null/empty),
+        // so the .Trim() calls below are provably safe.
+        if (string.IsNullOrWhiteSpace(Ticket.Title) ||
+            string.IsNullOrWhiteSpace(Ticket.Location) ||
+            string.IsNullOrWhiteSpace(Ticket.Description))
+        {
+            ModelState.AddModelError(string.Empty, "Title, location and description are required.");
+            LoadCategories();
+            return Page();
+        }
+
         try
         {
             // Map form model to view model and set the creating user from the current claim
@@ -76,9 +87,9 @@ public class CreateModel : PageModel
             var ticketVm = new TicketViewModel
             {
                 Id = Guid.NewGuid(),
-                Title = Ticket.Title.Trim() ?? string.Empty,
-                Description = Ticket.Description.Trim() ?? string.Empty,
-                Location = Ticket.Location.Trim() ?? string.Empty,
+                Title = (Ticket.Title ?? string.Empty).Trim(),
+                Description = (Ticket.Description ?? string.Empty).Trim(),
+                Location = (Ticket.Location ?? string.Empty).Trim(),
                 CategoryName = MapCategoryId(Ticket.CategoryId),
                 CalculatedPriority = Ticket.IsEmergency ? "Emergency" : "Low",
                 Status = "Submitted",
