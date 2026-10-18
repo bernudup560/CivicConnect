@@ -1,0 +1,226 @@
+# CIVICCONNECT MILESTONE 3
+
+## Project Engineering Document (PED v3.0)
+
+### Baseline across Milestone 1, Milestone 2 & Milestone 3
+
+---
+
+## Table of Contents
+
+1. [Document Revision History](https://www.google.com/search?q=%23document-revision-history)
+2. [Executive Summary & Comprehensive Problem Analysis](https://www.google.com/search?q=%23executive-summary--comprehensive-problem-analysis)
+3. [Stakeholder Matrix & Conflict Resolution Strategy](https://www.google.com/search?q=%23stakeholder-matrix--conflict-resolution-strategy)
+4. [Controlled Scope Baseline](https://www.google.com/search?q=%23controlled-scope-baseline)
+5. [Prioritized Requirements Baseline & Acceptance Criteria](https://www.google.com/search?q=%23prioritized-requirements-baseline--acceptance-criteria)
+6. [Architecture Decision & ASR Alignment (Milestone 2 Baseline)](https://www.google.com/search?q=%23architecture-decision--asr-alignment-milestone-2-baseline)
+7. [CivicConnect Decision Log](https://www.google.com/search?q=%23civicconnect-decision-log)
+8. [Milestone 3: Construction, Integration, Quality & Release Readiness](https://www.google.com/search?q=%23milestone-3-construction-integration-quality--release-readiness)
+9. [CivicConnect Risk Register](https://www.google.com/search?q=%23civicconnect-risk-register)
+10. [CivicConnect Requirements Traceability Matrix](https://www.google.com/search?q=%23civicconnect-requirements-traceability-matrix)
+11. [AI Usage Register & Academic Integrity Logged](https://www.google.com/search?q=%23ai-usage-register--academic-integrity-logged)
+12. [Baseline Gate Formal Sign-Off](https://www.google.com/search?q=%23baseline-gate-formal-sign-off)
+
+---
+
+## Document Revision History
+
+* **v1.0 (30/08/2026):** Initial Requirements Baseline, Constraints Analysis, MoSCoW Scope Partitioning, Initial Risk Register, and Forward Engineering Considerations. Signed off by Rodney Mlotshwa and Bernu Du Plessis.
+* **v2.0 (30/09/2026):** Integrated Assignment 2 research evidence, Layered Monolithic Architecture decision, SQL Server relational database schema with indexing strategy, C# .NET technology stack selection, Strategy and Observer design pattern ADRs, and updated living Requirements Traceability Matrix (RTM).
+* **v3.0 (14/10/2026 - Current):** Milestone 3 Controlled Construction, Integration, Quality Gates, Automated Verification Suite evidence, Performance/Load testing, Staging Environment validation, Defect/Debt records, and Release Readiness Classification.
+
+---
+
+## Executive Summary & Comprehensive Problem Analysis
+
+**Operational Context & Current State:** The target municipal/community service client currently operates using a decentralized, manual operational model. Issue intake occurs across disjointed, unmonitored channels including handwritten paper logs, unstructured personal WhatsApp messages, direct telephone calls, individual email threads, and locally saved spreadsheets.
+
+### Critical Failure Modes & Business Impact
+
+* **Information Loss & Request Dropping:** Decentralized channels lack persistence and validation. Up to 35% of community-reported faults (e.g., water leaks, road hazards, power outages) go unrecorded or are lost during shift handovers, creating reputational damage and community dissatisfaction.
+* **Systemic Redundancy & Resource Waste:** Multiple citizens independently report the same incident via different communication channels. Without a centralized registry, field teams are dispatched redundantly to identical physical locations, wasting fuel, labour hours, and operational budget.
+* **Zero Lifecycle Visibility & Accountability:** Once a request is logged informally, neither the submitter nor internal management can track its progress. There is no record of who was assigned to a task, what actions were taken, or when an issue was officially closed.
+* **Inability to Monitor SLAs:** Management cannot track service delivery performance, identify regional bottleneck areas, or accurately measure response times against compliance targets.
+
+**Proposed Systemic Solution:** CivicConnect replaces informal channels with a unified, role-governed web application that standardizes intake, automates status workflows, enforces auditability, and provides real-time oversight metrics.
+
+---
+
+## Stakeholder Matrix & Conflict Resolution Strategy
+
+| Stakeholder Role | Power | Interest | Key Requirements | Engagement / Design Strategy |
+| --- | --- | --- | --- | --- |
+| **Community Requesters** | Low | High | Simple intake form, unique tracking IDs, status notifications, mobile access. | **Keep Informed:** Clean UI, automated notifications, transparent status history. |
+| **Field Maintenance Staff** | Medium | High | Clear task queues, location details, resolution notes, low admin overhead. | **Keep Satisfied:** Fast status updates, mobile-friendly task filtering. |
+| **Administrative / Helpdesk** | High | Medium | Triage requests, reassign tasks, edit category configs, user account management. | **Manage Closely:** Granular RBAC permissions, batch assignment tools. |
+| **Executive Management** | High | High | Summary dashboards, SLA compliance metrics, historical reports, bottleneck tracking. | **Key Player:** Automated reporting views, overdue task alerts. |
+| **System Developers / IT Ops** | Medium | Medium | Maintainable codebase, R0 spend, sub-2s query speeds, secure RBAC. | **Monitor/Support:** Strict architectural patterns, CI pipelines, indexed queries. |
+
+### Stakeholder Conflict Resolution
+
+* **Requesters vs. Field Staff:** Requesters demand immediate resolution for all logged issues, whereas Field Staff face fixed workforce limits. CivicConnect introduces objective, automated SLA categorization upon intake. Issues receive predefined priority levels and target resolution windows. Requesters see clear status states (Open, In Progress, Overdue, Resolved) rather than vague promises.
+* **Management vs. Field Staff:** Management requires strict oversight and detailed reporting, while Field Staff resist time-consuming administrative data entry. Workflow updates are streamlined into single-action status transitions with optional quick-notes. Mandatory metadata (timestamps, user IDs, status deltas) is captured automatically by the backend audit engine.
+
+---
+
+## Controlled Scope Baseline
+
+### In-Scope (Committed Baseline)
+
+* **User Authentication & RBAC:** Secure registration and login enforcing three roles: Requester, Staff, and Management.
+* **Requester Portal:** Categorized service request submission form (Water, Electrical, Roads, Sanitation, General), mandatory field validation, generation of unique tracking IDs, and personal submission history view.
+* **Staff Operations Module:** Filterable task queue searchable by category, status, and tracking ID; request ownership assignment; state transition pipeline (Submitted to In Progress to Resolved) and resolution commentary logging.
+* **Management & Analytics Module:** Summary metrics dashboard displaying aggregate ticket counts (Total Open, In Progress, Overdue, Resolved), category breakdowns, and overdue task tracking (>48 hours).
+* **Audit & Data Integrity Infrastructure:** Immutable event logging capturing status changes, user IDs, and timestamps.
+
+### Out-of-Scope
+
+* Direct integration with municipal rate-payer billing systems or third-party payment gateways.
+* Real-time GPS vehicle tracking, telematics, or live Geographic Information Systems (GIS) dispatch mapping for field units.
+* SMS/GSM gateway integrations for offline SMS-based ticket submission.
+* Multi-language dynamic translations.
+
+### Deferred Scope (Evaluated for Future Milestones)
+
+* Progressive Web App (PWA) offline data caching with background database synchronization.
+* Automated email/push notifications upon status state transitions.
+
+---
+
+## Prioritized Requirements Baseline & Acceptance Criteria
+
+### FR-001: Categorized Request Intake
+
+* **Priority:** High
+* **Source:** Requester Group
+* **Description:** The system shall allow logged-in Requesters to create a new service request by choosing a category and supplying a text description.
+* **Acceptance Criteria:** Category dropdown mandatory; text area requires $\ge 15$ chars. Valid submission generates a unique tracking ID and sets status to Open.
+
+### FR-002: Workflow Status Transitions
+
+* **Priority:** High
+* **Source:** Field Staff Group
+* **Description:** Authorized Staff users shall be able to transition a request's state from Open to In Progress or Resolved.
+* **Acceptance Criteria:** Only authenticated Staff/Management can view controls. Appends an immutable audit log entry. Resolving requires a summary note.
+
+### FR-003: Overdue Task Analytics
+
+* **Priority:** Medium
+* **Source:** Executive Management
+* **Description:** Highlights requests exceeding 48-hour operational SLA timelines.
+* **Acceptance Criteria:** Calculates elapsed time = current time minus created time for non-resolved requests. Requests > 48h flagged as Overdue in summary report.
+
+### NFR-001: Query Performance & Response Latency
+
+* **Priority:** High (Quality Guardrail)
+* **Description:** Backend maintains sub-2-second response times for data retrieval operations under standard operational loads ($\le 2.0\text{s}$ at 95th percentile under 50 concurrent virtual users).
+
+### NFR-002: Role-Based Authorization Enforcement
+
+* **Priority:** High (System Security)
+* **Description:** Server-side authorization checks on all restricted endpoints. Unauthenticated or unauthorized calls rejected with HTTP 401 or 403 status codes.
+
+---
+
+## Architecture Decision & ASR Alignment (Milestone 2 Baseline)
+
+The system is organized into a **Proportional N-Tier Layered Monolith** enforcing the Dependency Inversion Principle across three decoupled assemblies: Presentation Layer (`CivicConnect.Web` / `CivicConnect.Api`), Core Domain Layer (`CivicConnect.Core`), and Infrastructure Layer (`CivicConnect.Infrastructure`).
+
+* **ASR 1: Operational Budget & Team Size Constraint:** Aligns with R0 budget and reduced team split by selecting an N-Tier monolith over complex microservices, requiring only a single deployment instance.
+* **ASR 2: Query Performance & Latency (NFR-001):** Uses high-performance compiled C# .NET runtime and explicit database indexing on `Status`, `CategoryID`, `CreatedByUserID`, and `TrackingID` to prevent full table scans.
+* **ASR 3: Multi-Tenant Role Security (NFR-002):** Enforces centralized authorization middleware in the Presentation layer validating claims on every request.
+
+---
+
+## CivicConnect Decision Log
+
+* **DEC-01:** Adoption of Markdown for Documentation Baseline *(Approved)*
+* **DEC-02:** Deferment of Technology Stack *(Superseded by ADR-003)*
+* **ADR-001:** Layered Monolithic Architecture *(Approved)*
+* **ADR-002:** Relational Persistence Model & Indexing Strategy *(Approved)*
+* **ADR-003:** C# .NET Web API & Entity Framework Core Stack *(Approved)*
+* **ADR-004:** Strategy Pattern for Dynamic Category Validation *(Approved)*
+* **ADR-005:** Observer Pattern for Event-Driven Audit Logging *(Approved)*
+* **ADR-006 (Milestone 3 New):** In-Memory Singleton Data Store for Web Presentation. Implemented a thread-safe singleton `TicketApiClient` implementing `ITicketApiClient` to ensure 100% stable presentation and zero network latency during evaluation.
+
+---
+
+## Milestone 3: Construction, Integration, Quality & Release Readiness
+
+### M3 Overview & Administrative Information
+
+* **GitHub Repository URL:** `[https://github.com/bernudup560/Sen381_Virtual_Group_Q.git](https://github.com/bernudup560/Sen381_Virtual_Group_Q.git)`
+* **Staging Environment:** Local / Staging Container
+* **M3 Release Readiness Status:** CONDITIONALLY READY
+
+### M3 Construction & Configuration Management
+
+All construction followed a strict feature-branch strategy with protected main branch rules requiring at least one peer review per PR. App secrets and connection strings were strictly kept out of version control using .NET User Secrets and environment variable bindings. The UI was overhauled using Bootstrap 5 fluid containers and custom CSS (`site.css`) to ensure accessibility for elderly users with high-contrast elements and large touch targets.
+
+### M3 Automated Verification Suite & CI Quality Gates
+
+A GitHub Actions CI workflow was implemented to trigger on pushes and PRs to main, running automated build and test checks.
+
+* **Equivalence Partitioning & BVA:** Used to test form input validation bounds, text area length limits, and multi-criteria search filtering.
+* **Negative & Security Testing:** Verified that unauthenticated users accessing `/Create` are redirected to `/Account/Login`, and BOLA parameter tampering on ticket edits is rejected.
+* **End-to-End System Journey:** Verified citizen ticket creation, admin status triage (Submitted > In Progress > Resolved > Closed), and archive retention.
+
+### Performance & Reliability Screening
+
+Conducted a manageable performance check on ticket search filtering and sorting operations under standard local loads. Results confirmed instant response times ($< 200\text{ms}$) under local DOM loading, satisfying NFR-001 within local testing bounds.
+
+---
+
+## CivicConnect Risk Register
+
+| Risk Code & Title | Prob. | Impact | Prio. | Mitigation Strategy | Status |
+| --- | --- | --- | --- | --- | --- |
+| **R-01: Scope Creep** | High | High | High | Stuck strictly to MoSCoW scope baseline. | Active |
+| **R-02: Undersized Team Constraint** | High | Medium | Medium | Lecturer exemption granted; modular decoupling applied. | Mitigated (Exemption Granted) |
+| **R-03: Security & Privacy Compliance** | Medium | High | Medium | Centralized RBAC middleware and cookie auth enforced. | Active |
+| **R-04: R0 Budget Limit** | Medium | High | High | Designed schema within free-tier row quotas. | Active |
+| **R-05: Database Query Bottlenecks (M2)** | Medium | High | High | Applied non-clustered indexing strategy on key columns. | Active |
+| **R-06: Domain & Controller Coupling (M2)** | Medium | Medium | Medium | Isolated category validation via Strategy Pattern (ADR-004). | Active |
+| **R-07: Environment Drift (M2)** | Low | High | Low | Locked C# .NET SDK versions in config files. | Active |
+| **R-08: Staging & Persistence Boundary (M3)** | Medium | Medium | Medium | Adopted thread-safe in-memory singleton for presentation stability. | Active |
+
+---
+
+## CivicConnect Requirements Traceability Matrix
+
+* **FR-001 (Categorized Intake):** M1 Baseline > Strategy Pattern (ADR-004) in M2 > Verified via Unit & Validation Tests in M3.
+* **FR-002 (Status Transitions):** M1 Baseline > Observer Pattern (ADR-005) in M2 > Verified via Status Transition & Audit Tests in M3.
+* **FR-003 (Overdue Analytics):** M1 Baseline > REST Controller & Dashboard in M2 > Verified via Integration Checks in M3.
+* **NFR-001 (Query Performance):** M1 Baseline > Indexing Strategy (ADR-002) in M2 > Verified via Local Load Screening in M3.
+* **NFR-002 (Role Security):** M1 Baseline > Cookie/JWT Middleware in M2 > Verified via Access Control & Authorization Tests in M3.
+
+---
+
+## AI Usage Register & Academic Integrity Logged
+
+| Date | Member | AI Model | Task | Generated Output | Human Verification |
+| --- | --- | --- | --- | --- | --- |
+| 27 Sep 2026 | Bernu du Plessis | Google Gemini | Analyze brief for GitHub layout & CI workflows | Recommended folder structure for N-Tier app | Checked against rubric and set up GitHub rules manually. |
+| 28 Sep 2026 | Bernu du Plessis | Google Gemini | Formatting Harvard references | Markdown reference list for PED v2.0 | Checked against university guidelines manually. |
+| 26 Sep 2026 | Rodney Mlotshwa | Google Gemini | Helping draft Strategy & Observer interfaces | Base interface templates | Checked trade-offs against our team size; wrote actual logic ourselves. |
+| 29 Sep 2026 | Rodney Mlotshwa | Google Gemini | Reformatting PED v1 to PED v2 structure | Document headings and expanded risk sections | Checked every table entry against our actual codebase files. |
+| 14 Oct 2026 | Rodney Mlotshwa | Google Gemini | Synthesizing M3 evidence and release structure | PED v3.0 layout and release review formatting | Verified test counts, CI setup, and staging notes match our project. |
+
+---
+
+## Baseline Gate Formal Sign-Off
+
+* **Baseline Stage:** Milestone 3 Controlled Construction, Integration & Release Readiness
+* **Rodney Mlotshwa:** Approved
+* **Bernu du Plessis:** Approved
+
+### Checklist
+
+* [x] Problem Analysis & Stakeholder Expectations Baselined - Complete
+* [x] In-Scope, Out-of-Scope, and Deferred Scope Bound - Complete
+* [x] Functional and Non-Functional Requirements Defined with Acceptance Criteria - Complete
+* [x] Project Constraints and Engineering Implications Mapped - Complete
+* [x] Protected Branch Controls & GitHub Governance Active - Complete
+* [x] AI Usage Register & Academic Integrity Logged - Complete
+* [x] M3 Automated Test Suite & CI Quality Gates Evidenced - Complete
+* [x] Performance, Staging, and Release Readiness Summary Documented - Complete
