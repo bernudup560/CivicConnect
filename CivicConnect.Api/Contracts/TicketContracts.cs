@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CivicConnect.Core.Entities;
 
+
 namespace CivicConnect.Api.Contracts;
 
 // What a client must send to create a ticket
@@ -56,4 +57,35 @@ public class TicketResponse
         CreatedAtUtc = ticket.CreatedAtUtc,
         LastUpdatedAtUtc = ticket.LastUpdatedAtUtc
     };
+
+
 }
+
+public abstract class BaseTicketDto
+    {
+        [Required(ErrorMessage = "Ticket title is required.")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Title must be between 5 and 100 characters.")]
+        public string Title { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Location is required.")]
+        [StringLength(150, ErrorMessage = "Location cannot exceed 150 characters.")]
+        public string Location { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Please select a valid municipal category.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid category selection.")]
+        public int CategoryId { get; set; }
+
+        [Required(ErrorMessage = "Description is required.")]
+        [MinLength(10, ErrorMessage = "Description must provide at least 10 characters.")]
+        public string Description { get; set; } = string.Empty;
+    }
+
+    public class CreateTicketViewModel : BaseTicketDto { }
+
+    public class TicketViewModel : BaseTicketDto
+    {
+        public int Id { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+        public string CalculatedPriority { get; set; } = "Low";
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }

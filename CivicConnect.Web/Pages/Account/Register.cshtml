@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Account - CivicConnect";
 }
 
-<div class="container-fluid my-5 px-4">
+<div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-6">
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
@@ -14,10 +14,22 @@
                     <p class="text-light opacity-75 small mb-0">Join CivicConnect to log and manage local requests</p>
                 </div>
                 <div class="card-body p-4 p-md-5 bg-white">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger rounded-3 fs-6 mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>@Model.ErrorMessage
+                        </div>
+                    }
+
                     <form method="post">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Full Name</label>
-                            <input asp-for="FullName" class="form-control form-control-lg rounded-3" placeholder="John Doe" required />
+                            <input asp-for="FullName"
+                                   class="form-control form-control-lg rounded-3"
+                                   placeholder="John Doe"
+                                   pattern=".*[a-zA-Z]+.*"
+                                   title="Full Name must contain letters."
+                                   required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Email Address</label>
@@ -25,7 +37,12 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Password</label>
-                            <input asp-for="Password" type="password" class="form-control form-control-lg rounded-3" placeholder="••••••••" required />
+                            <div class="input-group input-group-lg">
+                                <input asp-for="Password" type="password" id="registerPassword" class="form-control rounded-start-3" placeholder="••••••••" required />
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePasswordVisibility('registerPassword', 'registerEyeIcon')" aria-label="Toggle password visibility">
+                                    <i class="bi bi-eye" id="registerEyeIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold shadow-sm">
                             Register Account <i class="bi bi-person-plus ms-1"></i>
@@ -40,3 +57,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePasswordVisibility(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("bi-eye");
+            eyeIcon.classList.add("bi-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("bi-eye-slash");
+            eyeIcon.classList.add("bi-eye");
+        }
+    }
+</script>

@@ -1,26 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using CivicConnect.Core.Interfaces;
 using CivicConnect.Infrastructure.Data;
-using CivicConnect.Infrastructure.Repositories;
+using CivicConnect.Core.Interfaces;
+using CivicConnect.Infrastructure.Repositories; // Uncomment if your UnitOfWork is in a Repositories folder
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CivicConnect.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection, string databaseConnectionString)
     {
-        // 1. Register DbContext (SQLite)
-        services.AddDbContext<CivicConnectDbContext>(options =>
-            options.UseSqlite(connectionString));
+        serviceCollection.AddDbContext<CivicConnectDbContext>(databaseOptions =>
+            databaseOptions.UseSqlite(databaseConnectionString));
 
-        // 2. Register Generic Repository (for basic CRUD operations across all entities)
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>(); 
+        
+        return serviceCollection;
+    }
 
-        // 3. Register Specific Repositories & Unit of Work
-        services.AddScoped<ITicketRepository, TicketRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        return services;
+    public static void EnsureDatabaseCreated(this IServiceProvider serviceProvider)
+    {
+        using var serviceScope = serviceProvider.CreateScope();
+        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<CivicConnectDbContext>();
+        databaseContext.Database.EnsureCreated();
     }
 }
