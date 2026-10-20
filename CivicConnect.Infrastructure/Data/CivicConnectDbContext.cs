@@ -76,7 +76,8 @@ public class CivicConnectDbContext : DbContext
             new { Id = 1, Name = "Water and sanitation", Description = "Leaks, burst pipes, sewage", BaseUrgencyScore = 8 },
             new { Id = 2, Name = "Roads and potholes", Description = "Road damage and signage", BaseUrgencyScore = 5 },
             new { Id = 3, Name = "Street lighting", Description = "Broken or missing streetlights", BaseUrgencyScore = 4 },
-            new { Id = 4, Name = "Waste collection", Description = "Missed refuse collections", BaseUrgencyScore = 3 });
+            new { Id = 4, Name = "Waste collection", Description = "Missed refuse collections", BaseUrgencyScore = 3 },
+            new { Id = 5, Name = "Parks and recreation", Description = "Park maintenance and facilities", BaseUrgencyScore = 2 });
 
         modelBuilder.Entity<User>().HasData(
             new

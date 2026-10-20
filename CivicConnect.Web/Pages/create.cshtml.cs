@@ -124,21 +124,21 @@ public class CreateModel : PageModel
     {
         CategoryOptions = new List<SelectListItem>
         {
-            new SelectListItem { Value = "1", Text = "Roads & Potholes" },
-            new SelectListItem { Value = "2", Text = "Water & Sanitation" },
-            new SelectListItem { Value = "3", Text = "Electricity & Lighting" },
-            new SelectListItem { Value = "4", Text = "Parks & Recreation" },
-            new SelectListItem { Value = "5", Text = "Waste Management" }
+        new SelectListItem { Value = "1", Text = "Water and sanitation" },
+        new SelectListItem { Value = "2", Text = "Roads and potholes" },
+        new SelectListItem { Value = "3", Text = "Street lighting" },
+        new SelectListItem { Value = "4", Text = "Waste collection" },
+        new SelectListItem { Value = "5", Text = "Parks and recreation" }
         };
     }
 
     private static string MapCategoryId(int categoryId) => categoryId switch
     {
-        1 => "Roads & Potholes",
-        2 => "Water & Sanitation",
-        3 => "Electricity & Lighting",
-        4 => "Parks & Recreation",
-        5 => "Waste Management",
-        _ => "General"
+        1 => "Water and sanitation",
+    2 => "Roads and potholes",
+    3 => "Street lighting",
+    4 => "Waste collection",
+    5 => "Parks and recreation",
+    _ => "General"
     };
 }
