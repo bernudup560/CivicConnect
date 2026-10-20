@@ -32,15 +32,11 @@ app.UseHttpsRedirection();
 
 
 app.UseStaticFiles();
-
 // (Correlation middleware and lightweight telemetry removed)
-
 app.UseRouting();
-
 // Enable authentication middleware
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
 
 app.Run();

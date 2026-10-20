@@ -181,10 +181,12 @@ public class TicketApiClient : ITicketApiClient
 
     private static string MapCategoryId(int categoryId) => categoryId switch
     {
-        1 => "Roads & Potholes",
-        2 => "Water & Sanitation",
-        3 => "Electricity & Lighting",
-        _ => "General"
+         1 => "Water and sanitation",
+    2 => "Roads and potholes",
+    3 => "Street lighting",
+    4 => "Waste collection",
+    5 => "Parks and recreation",
+    _ => "General"
     };
 
     private string GenerateTicketNumber()

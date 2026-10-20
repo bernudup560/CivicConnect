@@ -48,12 +48,12 @@
                             <div class="col-md-6">
                                 <label asp-for="Ticket.CategoryId" class="form-label fw-semibold text-dark">Category</label>
                                 <select asp-for="Ticket.CategoryId" class="form-select form-select-lg rounded-3" required>
-                                    <option value="">Select Category...</option>
-                                    <option value="1">Roads & Potholes</option>
-                                    <option value="2">Water & Sanitation</option>
-                                    <option value="3">Electricity & Lighting</option>
-                                    <option value="4">Parks & Recreation</option>
-                                    <option value="5">Waste Management</option>
+                                   <option value="">Select Category...</option>
+                                    <option value="1">Water and sanitation</option>
+                                    <option value="2">Roads and potholes</option>
+                                    <option value="3">Street lighting</option>
+                                    <option value="4">Waste collection</option>
+                                    <option value="5">Parks and recreation</option>
                                 </select>
                                 <span asp-validation-for="Ticket.CategoryId" class="text-danger small"></span>
                             </div>
@@ -78,6 +78,14 @@
                             <label asp-for="Ticket.Description" class="form-label fw-semibold text-dark">Detailed Description</label>
                             <textarea asp-for="Ticket.Description" class="form-control rounded-3" rows="5" placeholder="Provide extra context or visual details..." required></textarea>
                             <span asp-validation-for="Ticket.Description" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Emergency flag -->
+                        <div class="form-check mb-4 p-3 rounded-3 border border-danger-subtle bg-danger-subtle">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" asp-for="Ticket.IsEmergency" />
+                            <label class="form-check-label fw-semibold text-danger" asp-for="Ticket.IsEmergency">
+                                Mark as Emergency (Immediate Safety or Infrastructure Risk)
+                            </label>
                         </div>
 
                         <!-- Form Actions -->
